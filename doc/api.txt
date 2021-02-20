@@ -1,0 +1,20 @@
+
+get_token(session) -> token
+
+
+get_message(request_message) -> response_message
+
+
+response_message: 
+- state {WAITING_PLAYER, YOUR_TURN, ENEMY_TURN, GAME_OVER, ERROR}
+- error_message
+- deck - json array from 0-5 cards [7,7,4,3,9]
+- win {0, 1}
+- size {0, 24}
+- your_index (always starts from left)
+- enemy_index (always right)
+- stack_size
+
+request_message:
+- token
+- move_card: if > 0 then goes right
