@@ -6,7 +6,7 @@
 ```bash
 cd server
 docker build -t zhc/duelchik .
-docker run --it -p8080:8080 zhc/duelchik
+docker run --rm -p8080:8080 zhc/duelchik
 ```
 
 ### Через путон
