@@ -61,7 +61,7 @@ export default {
       this.mouseOverInd = 0;
     },
     isMouseOver: function (point) {
-      return point === this.mouseOverInd;
+      return point === (this.mouseOverInd - store.getters.playerIndex);
     }
   }
 }

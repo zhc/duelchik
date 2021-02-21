@@ -15,7 +15,7 @@ const state = {
         size: 25,
         deck: [1, 4, 6, 1],
         win: 0,
-        your_index: 0,
+        your_index: 1,
         enemy_index: 24,
         stack_size: 20,
     }
