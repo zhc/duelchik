@@ -11,10 +11,10 @@ Vue.use(Vuex);
 const state = {
     game: {
         state: '',
-        error_message: ',',
+        error_message: '',
         size: 25,
         deck: [1, 4, 6, 1],
-        win: -1,
+        win: 0,
         your_index: 0,
         enemy_index: 24,
         stack_size: 20,
