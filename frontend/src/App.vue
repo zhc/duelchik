@@ -24,7 +24,7 @@ import store from "../src/store";
 export default {
   data() {
     return {
-      mouseOverInd: 0
+      mouseOverInd: -1
     }
   },
   computed: {
@@ -52,16 +52,19 @@ export default {
         if (ind === (store.getters.playerIndex + point)) {
           return true;
         }
+        if (ind === (store.getters.playerIndex - point)) {
+          return true;
+        }
       });
     },
     mouseOverPos: function (ind) {
       this.mouseOverInd = ind;
     },
     mouseOutPos: function () {
-      this.mouseOverInd = 0;
+      this.mouseOverInd = -1;
     },
     isMouseOver: function (point) {
-      return point === (this.mouseOverInd - store.getters.playerIndex);
+      return this.mouseOverInd > -1 && (point === (this.mouseOverInd - store.getters.playerIndex) || point === (store.getters.playerIndex - this.mouseOverInd));
     }
   }
 }
