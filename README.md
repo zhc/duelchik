@@ -20,3 +20,19 @@ python run.py
 
 ### Дока API
 Открыть ссылку http://localhost:8080/docs
+
+## Как запустить frontend
+
+## Через докер
+```bash
+cd frontend
+docker build -t zhc/duelchik/frontend .
+docker run --rm -p8888:80 zhc/duelchik/frontend
+```
+
+## Через жс
+```bash
+cd frontend
+npm install
+npm run serve
+```
