@@ -18,3 +18,36 @@ response_message:
 request_message:
 - token
 - move_card: if > 0 then goes right
+
+
+=========== server ================
+
+Game
+    init() # Заполняет деку, расставляет игроков в позицию, говорит чей ход сейчас
+    get_player(token) -> Player
+    players
+Deck
+    init() # Размешивает колоду карт
+    next_card() 
+    empty() 
+Player
+    init()
+    set_enemy(player)
+    forward(card)
+    backward(card)
+    hurt()
+    take(card)
+    cards()
+
+    position
+    cards
+    is_active - текущий игрок активен
+    is_dead - умер (конец игры типа)
+    size - fieldsize
+Lobby
+    get_token(session) -> token
+    get_message(request) -> response
+
+
+
+

@@ -9,112 +9,87 @@ ERROR = 'ERROR'
 
 
 class Message:
-    def __init__(self, status, cards, is_won=False,
-                 your_index=0, enemy_index=0):
-        self.status = status
-        self.cards = cards
-        self.is_won = is_won
+    def __init__(self, state=WAITING_PLAYER, error_message='',
+                 deck=[], win=0, size=23, your_index=0, enemy_index=0,
+                 stack_size=10):
+        self.state = state
+        self.error_message = error_message
+        self.deck = deck
+        self.win = win
+        self.size = size
         self.your_index = your_index
         self.enemy_index = enemy_index
+        self.stack_size = stack_size
+
+
+class Deck:
+
+    def __init__(self, cards):
+        self.cards = cards
+        shuffle(cards)
+
+    def next_card(self):
+        card = self.cards.pop()
+        return card
+
+    def empty(self):
+        return len(self.cards) == 0
 
 
 class Player:
 
-    def __init__(self, game):
-        self.game = game
+    def __init__(self, size):
+        self.size = size
+        self.enemy = None
         self.position = 0
         self.cards = []
-        self.is_won = False
-        self.last_played_card = 0
+        self.is_active = False
+        self.is_dead = False
 
-    def get_message(self):
-        if self.game.has_players():
-            if self.game.game_over:
-                return Message(GAME_OVER, self.cards, is_won=self.is_won,
-                               your_index=self.position,
-                               enemy_index=self.get_enemy().position)
-            else:
-                if self.game.current_player == self:
-                    return Message(YOUR_TURN, self.cards, is_won=self.is_won,
-                                   your_index=self.position,
-                                   enemy_index=self.get_enemy().position)
-                else:
-                    return Message(ENEMY_TURN, self.cards,
-                                   is_won=self.is_won,
-                                   your_index=self.position,
-                                   enemy_index=self.get_enemy().position)
+    def start(self, enemy):
+        self.enemy = enemy
+        self.enemy.enemy = self
+        self.is_active = True
+
+    def forward(self, card):
+        if not self.is_active:
+            return
+        if card not in self.cards:
+            return
+        if self.position + card > self.size - self.enemy.position - 1:
+            return
+        self.position += card
+        self.cards.remove(card)
+        if self.position == self.size - self.enemy.position - 1:
+            self.enemy.hurt()
         else:
-            return Message(WAITING_PLAYER, self.cards)
+            self.switch_turn()
 
-    def move_card(self, card, sign):
-        if card in self.cards:
+    def backward(self, card):
+        if not self.is_active:
+            return
+        if card not in self.cards:
+            return
+        if self.position - card < 0:
+            return
+        self.position -= card
+        self.cards.remove(card)
+        self.switch_turn()
 
-            left_bound = 0
-            right_bound = self.game.size - 1
-            if self.game.left_player == self:
-                right_bound = self.game.right_player.position
-            if self.game.right_player == self:
-                left_bound = self.game.left_player.position
+    def hurt(self):
+        self.is_active = False
+        self.enemy.is_active = False
+        self.is_dead = True
 
-            next_position = self.position + card*sign
-            if next_position < left_bound or next_position > right_bound:
-                raise Exception('Illegal move')
+    def switch_turn(self):
+        self.is_active = False
+        self.enemy.is_active = True
 
-            self.position = next_position
-            self.cards.remove(card)
-            self.last_played_card = card
-
-            if len(self.game.deck) > 0:
-                self.add_card(self.game.deck.pop())
-
-            if next_position == self.get_enemy().position:
-                self.game.game_over = True
-                self.is_won = True
-
-    def add_card(self, card):
+    def take(self, card):
         self.cards.append(card)
-
-    def get_enemy(self):
-        if self.game.left_player == self:
-            return self.game.right_player
-        else:
-            return self.game.left_player
 
 
 class Game:
 
     def __init__(self):
-        self.players = {}
-        self.current_player = None
-        self.left_player = None
-        self.right_player = None
-        self.size = 23
-        self.deck = [1, 2, 3, 4, 5]*5
-        shuffle(self.deck)
-        self.game_over = False
-
-    def add_player(self, token):
-        if token not in self.players:
-            player = Player(self)
-            self.players[token] = player
-            if self.left_player is None:
-                self.left_player = player
-                player.position = 0
-            else:
-                self.right_player = player
-                player.position = self.size - 1
-        if self.has_players():
-            self.current_player = list(self.players.values())[0]
-            self.deal_cards()
-
-    def has_players(self):
-        return len(self.players) >= 2
-
-    def get_player(self, token):
-        return self.players[token]
-
-    def deal_cards(self):
-        for i in range(5):
-            self.left_player.add_card(self.deck.pop())
-        for i in range(5):
-            self.right_player.add_card(self.deck.pop())
+        pass
