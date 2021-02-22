@@ -12,10 +12,10 @@ class Lobby:
         if session not in self.games:
             game = Game()
             self.games[session] = game
-        game = self.sessions[session]
+        game = self.games[session]
         if not game.has_players():
             token_uuid = str(uuid4())
-            player = game.register_token(token_uuid)
+            player = game.create_player()
             self.players[token_uuid] = player, game
             return token_uuid
         return ''

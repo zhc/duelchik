@@ -8,20 +8,6 @@ GAME_OVER = 'GAME_OVER'
 ERROR = 'ERROR'
 
 
-class Message:
-    def __init__(self, state=WAITING_PLAYER, error_message='',
-                 deck=[], win=0, size=23, your_index=0, enemy_index=0,
-                 stack_size=10):
-        self.state = state
-        self.error_message = error_message
-        self.deck = deck
-        self.win = win
-        self.size = size
-        self.your_index = your_index
-        self.enemy_index = enemy_index
-        self.stack_size = stack_size
-
-
 class Deck:
 
     def __init__(self, cards):
@@ -131,6 +117,8 @@ class Game:
         return len(self.players) == 2
 
     def turn(self, player, move_card):
+        if not self.has_players():
+            return player
         if not player.has_moves():
             player.hurt()
         if move_card > 0:
