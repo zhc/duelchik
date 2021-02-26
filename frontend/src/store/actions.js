@@ -26,15 +26,16 @@ export const getMessage = ({commit, state}, moveCard) => {
         (er) => {
             console.error(er);
         },
-
     );
 };
 
-export const getToken = ({commit, state}) => {
-    return api.getToken((json) => {
-        console.log(json);
-        commit('setToken', json.token);
-    }, (err) => {
-        console.error(err);
-    })
+export const getToken = ({commit, state}, sessionId) => {
+    return api.getToken(
+        sessionId,
+        (json) => {
+            console.log(json);
+            commit('setToken', json.token);
+        }, (err) => {
+            console.error(err);
+        })
 };

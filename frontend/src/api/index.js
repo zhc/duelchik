@@ -38,7 +38,7 @@ export function ping(token, cb, errCb) {
     });
 }
 
-export function getToken(cb, errCb) {
+export function getToken(sessionId, cb, errCb) {
     return fetch('http://localhost:8080/api/get_token', {
         method: 'POST',
         headers: {
@@ -46,7 +46,7 @@ export function getToken(cb, errCb) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            'session': 'string',
+            'session': sessionId,
         })
     }).then((response) => {
         return response.json();

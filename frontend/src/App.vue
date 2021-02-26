@@ -1,18 +1,28 @@
 <template>
   <div class="arena">
-    <div class="players">
-      <div v-for="(n, ind) in size">
-        <button class="position"
-                :disabled="!canGoTo(ind)"
-                :class="{ 'player' : isYourPos(ind), 'enemy' : isEnemyPos(ind) }"
-                @click="moveTo(ind)"
-                @mouseover="mouseOverPos(ind)" @mouseout="mouseOutPos"></button>
+    <div class="system_messages" v-if="systemMessage !== ''" v-html="systemMessage"></div>
+    <div class="session" v-if="!gameStarted">
+      <div class="session_inner">
+        <label for="session_id" class="session_label">Enter session uid:</label>
+        <input id="session_id" class="session_input" v-model="session"/>
+        <button type="button" class="session_btn" :disabled="session === ''" @click="startGameSession">Fight!</button>
       </div>
     </div>
-    <div class="cards">
-      <div class="cards_inner">
-        <div class="card" v-for="item in deck" :class="{ 'hover' : isMouseOver(item) }">
-          <div class="card_number">{{ item }}</div>
+    <div class="" v-if="gameStarted">
+      <div class="players">
+        <div v-for="(n, ind) in size">
+          <button class="position"
+                  :disabled="!canGoTo(ind)"
+                  :class="{ 'player' : isYourPos(ind), 'enemy' : isEnemyPos(ind) }"
+                  @click="moveTo(ind)"
+                  @mouseover="mouseOverPos(ind)" @mouseout="mouseOutPos"></button>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="cards_inner">
+          <div class="card" v-for="item in deck" :class="{ 'hover' : isMouseOver(item) }">
+            <div class="card_number">{{ item }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -25,7 +35,8 @@ export default {
   data() {
     return {
       mouseOverInd: -1,
-      pingTimer: null
+      pingTimer: null,
+      session: '',
     }
   },
   computed: {
@@ -38,14 +49,34 @@ export default {
     state() {
       return store.getters.state;
     },
+    gameStarted() {
+      return store.getters.token !== '';
+    },
+    systemMessage() {
+      if (store.getters.state === 'WAITING_PLAYER') {
+        return 'Waiting for the second player...';
+      }
+      if (store.getters.state === 'GAME_OVER') {
+        if (store.getters.win) {
+          return '<strong>YOU WIN!</strong>';
+        } else {
+          return '<strong>YOU LOSE!</strong>';
+        }
+      }
+      if (store.getters.state === 'YOUR_TURN') {
+        return 'YOUR TURN...';
+      }
+      if (store.getters.state === 'ENEMY_TURN') {
+        return 'ENEMY TURN...';
+      }
+      if (store.getters.state === 'ERROR') {
+        return 'ERROR!!! ' + store.getters.errorMessage;
+      }
+      return '';
+    },
   },
   created() {
-    store.dispatch('getToken').then(() => {
-      store.dispatch('ping');
-    });
-    this.pingTimer = setInterval(() => {
-      store.dispatch('ping');
-    }, 2000);
+
   },
   watch: {
     state(newState, oldState) {
@@ -55,6 +86,14 @@ export default {
     }
   },
   methods: {
+    startGameSession() {
+      store.dispatch('getToken', this.session).then(() => {
+        store.dispatch('ping');
+      });
+      this.pingTimer = setInterval(() => {
+        store.dispatch('ping');
+      }, 2000);
+    },
     moveTo: function (ind) {
       let moveCard = ind - store.getters.playerIndex;
       store.dispatch('getMessage', moveCard);
@@ -108,6 +147,43 @@ body {
   flex-direction: column;
   align-content: center;
   height: 100%;
+  margin-top: 10%;
+}
+
+.session {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  &_inner {
+    width: 300px;
+  }
+  &_label {
+    display: block;
+    line-height: 1.5em;
+    margin-bottom: 10px;
+  }
+  &_input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    &:focus {
+      outline: none;
+    }
+  }
+  &_btn {
+    padding: 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+}
+
+.system_messages {
+  text-align: center;
+  padding: 15px 0;
 }
 
 .players {
