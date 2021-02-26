@@ -9,6 +9,7 @@ import mutations from './mutations.js';
 Vue.use(Vuex);
 
 const state = {
+    token: '',
     game: {
         state: '',
         error_message: '',

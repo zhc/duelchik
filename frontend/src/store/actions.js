@@ -2,9 +2,23 @@
 
 import * as api from '../api';
 
-export const getMessage = ({commit, state}, payload) => {
+export const ping = ({commit, state}) => {
+    return api.ping(
+        state.token,
+        (json) => {
+            console.log(json);
+            commit('setGameState', json);
+        },
+        (err) => {
+            console.error(err);
+        }
+    );
+};
+
+export const getMessage = ({commit, state}, moveCard) => {
     return api.getMessage(
-        payload,
+        state.token,
+        moveCard,
         (json) => {
             console.log(json);
             commit('setGameState', json);
@@ -14,4 +28,13 @@ export const getMessage = ({commit, state}, payload) => {
         },
 
     );
+};
+
+export const getToken = ({commit, state}) => {
+    return api.getToken((json) => {
+        console.log(json);
+        commit('setToken', json.token);
+    }, (err) => {
+        console.error(err);
+    })
 };

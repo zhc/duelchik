@@ -24,7 +24,8 @@ import store from "../src/store";
 export default {
   data() {
     return {
-      mouseOverInd: -1
+      mouseOverInd: -1,
+      pingTimer: null
     }
   },
   computed: {
@@ -34,12 +35,29 @@ export default {
     size: function () {
       return store.getters.size;
     },
+    state() {
+      return store.getters.state;
+    },
   },
   created() {
+    store.dispatch('getToken').then(() => {
+      store.dispatch('ping');
+    });
+    this.pingTimer = setInterval(() => {
+      store.dispatch('ping');
+    }, 2000);
+  },
+  watch: {
+    state(newState, oldState) {
+      if (newState === 'GAME_OVER') {
+        clearInterval(this.pingTimer);
+      }
+    }
   },
   methods: {
     moveTo: function (ind) {
-      store.dispatch('getMessage', ind);
+      let moveCard = ind - store.getters.playerIndex;
+      store.dispatch('getMessage', moveCard);
     },
     isYourPos: function (ind) {
       return ind === store.getters.playerIndex;
@@ -48,14 +66,18 @@ export default {
       return ind === store.getters.enemyIndex;
     },
     canGoTo: function (ind) {
-      return store.getters.deck.some(point => {
-        if (ind === (store.getters.playerIndex + point)) {
-          return true;
-        }
-        if (ind === (store.getters.playerIndex - point)) {
-          return true;
-        }
-      });
+      if (store.getters.state === 'YOUR_TURN') {
+        return store.getters.deck.some(point => {
+          if (ind === (store.getters.playerIndex + point)) {
+            return true;
+          }
+          if (ind === (store.getters.playerIndex - point)) {
+            return true;
+          }
+        });
+      } else {
+        return false;
+      }
     },
     mouseOverPos: function (ind) {
       this.mouseOverInd = ind;
