@@ -7,3 +7,5 @@ export const deck = state => state.game.deck;
 export const size = state => state.game.size;
 export const win = state => state.game.win;
 export const errorMessage = state => state.game.error_message;
+export const host = state => state.host;
+export const pingTimer = state => state.pingTimer;

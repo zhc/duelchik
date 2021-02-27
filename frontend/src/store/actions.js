@@ -1,6 +1,7 @@
 "use strict";
 
 import * as api from '../api';
+import store from "./index";
 
 export const ping = ({commit, state}) => {
     return api.ping(
@@ -8,11 +9,19 @@ export const ping = ({commit, state}) => {
         (json) => {
             console.log(json);
             commit('setGameState', json);
+            commit('setPingTimer', setTimeout(() => {
+                store.dispatch('ping');
+            }, 3000));
         },
         (err) => {
             console.error(err);
         }
     );
+};
+
+export const pong = ({commit, state}) => {
+    console.log('pong');
+    clearTimeout(store.getters.pingTimer);
 };
 
 export const getMessage = ({commit, state}, moveCard) => {

@@ -3,9 +3,9 @@
     <div class="system_messages" v-if="systemMessage !== ''" v-html="systemMessage"></div>
     <div class="session" v-if="!gameStarted">
       <div class="session_inner">
-        <label for="session_id" class="session_label">Enter session uid:</label>
-        <input id="session_id" class="session_input" v-model="session"/>
-        <button type="button" class="session_btn" :disabled="session === ''" @click="startGameSession">Fight!</button>
+        <input class="session_host" v-model="server" placeholder="http://127.0.0.1"/>
+        <input class="session_id" v-model="session" placeholder="Enter session id"/>
+        <button type="button" class="session_btn" :disabled="!hostDataIsValid" @click="startGameSession">Fight!</button>
       </div>
     </div>
     <div class="" v-if="gameStarted">
@@ -37,9 +37,13 @@ export default {
       mouseOverInd: -1,
       pingTimer: null,
       session: '',
+      server: store.getters.host,
     }
   },
   computed: {
+    hostDataIsValid() {
+      return this.session !== '' && this.server !== '';
+    },
     deck: function () {
       return store.getters.deck;
     },
@@ -81,18 +85,16 @@ export default {
   watch: {
     state(newState, oldState) {
       if (newState === 'GAME_OVER') {
-        clearInterval(this.pingTimer);
+        store.dispatch('pong');
       }
     }
   },
   methods: {
     startGameSession() {
+      store.commit('setHost', this.server);
       store.dispatch('getToken', this.session).then(() => {
         store.dispatch('ping');
       });
-      this.pingTimer = setInterval(() => {
-        store.dispatch('ping');
-      }, 2000);
     },
     moveTo: function (ind) {
       let moveCard = ind - store.getters.playerIndex;
@@ -158,12 +160,8 @@ body {
   &_inner {
     width: 300px;
   }
-  &_label {
-    display: block;
-    line-height: 1.5em;
-    margin-bottom: 10px;
-  }
-  &_input {
+  &_host,
+  &_id {
     display: block;
     width: 100%;
     box-sizing: border-box;
@@ -171,6 +169,9 @@ body {
     &:focus {
       outline: none;
     }
+  }
+  &_host {
+    margin-bottom: 10px;
   }
   &_btn {
     padding: 10px;

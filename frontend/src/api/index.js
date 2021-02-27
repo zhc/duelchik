@@ -1,5 +1,8 @@
+import store from '../store';
+
 export function getMessage(token, moveCard, cb, errCb) {
-    return fetch('http://localhost:8080/api/get_message', {
+    let host = store.getters.host;
+    return fetch(host + '/api/get_message', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -19,7 +22,8 @@ export function getMessage(token, moveCard, cb, errCb) {
 }
 
 export function ping(token, cb, errCb) {
-    return fetch('http://localhost:8080/api/get_message', {
+    let host = store.getters.host;
+    return fetch(host + '/api/get_message', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -39,7 +43,8 @@ export function ping(token, cb, errCb) {
 }
 
 export function getToken(sessionId, cb, errCb) {
-    return fetch('http://localhost:8080/api/get_token', {
+    let host = store.getters.host;
+    return fetch(host + '/api/get_token', {
         method: 'POST',
         headers: {
             Accept: 'application/json',

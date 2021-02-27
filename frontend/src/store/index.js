@@ -9,8 +9,10 @@ import mutations from './mutations.js';
 Vue.use(Vuex);
 
 const state = {
+    host: 'http://localhost:8080',
     session: '',
     token: '',
+    pingTimer: null,
     game: {
         state: '',
         error_message: '',
