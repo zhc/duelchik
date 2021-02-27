@@ -122,14 +122,19 @@ class Game:
     def turn(self, player, move_card):
         if not self.has_players():
             return player
-        if not player.has_moves():
+        if player.is_active and not player.has_moves():
             player.hurt()
-        if move_card > 0:
+        elif move_card > 0:
             player.forward(move_card)
         elif move_card < 0:
             player.backward(-move_card)
         else:
-            pass
+            if len(player.cards) == 0 and len(player.enemy.cards) == 0:
+                if player.position < player.enemy.position:
+                    player.hurt()
+                elif player.position == player.enemy.position:
+                    player.hurt()
+                    player.enemy.hurt()
         while len(player.cards) < 5 and not self.deck.empty():
             card = self.deck.next_card()
             player.take(card)
