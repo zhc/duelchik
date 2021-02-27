@@ -43,7 +43,12 @@ export const getToken = ({commit, state}, sessionId) => {
         sessionId,
         (json) => {
             console.log(json);
-            commit('setToken', json.token);
+            if (json.token !== '') {
+                commit('setToken', json.token);
+                store.dispatch('ping');
+            } else {
+                commit('setState', 'EMPTY_TOKEN');
+            }
         }, (err) => {
             console.error(err);
         })

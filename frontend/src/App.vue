@@ -77,6 +77,9 @@ export default {
       if (store.getters.state === 'ERROR') {
         return 'ERROR!!! ' + store.getters.errorMessage;
       }
+      if (store.getters.state === 'EMPTY_TOKEN') {
+        return 'The game is already running...';
+      }
       return '';
     },
   },
@@ -93,9 +96,7 @@ export default {
   methods: {
     startGameSession() {
       store.commit('setHost', this.server);
-      store.dispatch('getToken', this.session).then(() => {
-        store.dispatch('ping');
-      });
+      store.dispatch('getToken', this.session);
     },
     moveTo: function (ind) {
       let moveCard = ind - store.getters.playerIndex;
