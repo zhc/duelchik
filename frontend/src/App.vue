@@ -37,7 +37,7 @@ export default {
     return {
       mouseOverInd: -1,
       pingTimer: null,
-      session: '',
+      session: store.getters.session,
       server: store.getters.host,
     }
   },

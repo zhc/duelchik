@@ -45,6 +45,8 @@
     "@sentry/vue": "^5.29.2",
     "compressorjs": "^1.0.6",
     "debounce": "^1.2.0",
+    "query-string": "^6.14.1",
+    "save-dev": "^0.0.1-security",
     "uuid": "^8.2.0",
     "vue-lazyload": "^1.3.3"
   }

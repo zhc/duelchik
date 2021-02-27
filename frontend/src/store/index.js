@@ -5,12 +5,15 @@ import Vuex from 'vuex';
 import * as actions from './actions.js';
 import * as getters from './getters.js';
 import mutations from './mutations.js';
+import queryString from 'query-string';
 
 Vue.use(Vuex);
 
+const parsedQueryString = queryString.parse(location.search);
+
 const state = {
     host: 'http://' + window.location.hostname + ':8080',
-    session: '',
+    session: parsedQueryString.d,
     token: '',
     pingTimer: null,
     game: {

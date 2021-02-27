@@ -1,5 +1,6 @@
 "use strict";
 export const token = state => state.token;
+export const session = state => state.session;
 export const state = state => state.game.state;
 export const playerIndex = state => state.game.your_index;
 export const enemyIndex = state => state.game.enemy_index;
