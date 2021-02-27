@@ -9,7 +9,7 @@ import mutations from './mutations.js';
 Vue.use(Vuex);
 
 const state = {
-    host: 'http://80.78.248.143:8080/',
+    host: 'http://' + window.location.hostname + ':8080',
     session: '',
     token: '',
     pingTimer: null,

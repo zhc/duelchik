@@ -1,6 +1,7 @@
 <template>
   <div class="arena">
     <div class="system_messages" v-if="systemMessage !== ''" v-html="systemMessage"></div>
+    <div class="system_action" v-if="state === 'GAME_OVER'"><button class="arena_restart_btn" @click="startGameSession">RESTART</button></div>
     <div class="session" v-if="!gameStarted">
       <div class="session_inner">
         <input class="session_host" v-model="server" placeholder="http://127.0.0.1"/>
@@ -151,6 +152,15 @@ body {
   height: 100%;
   padding-top: 280px;
   background: #fff url('./assets/espada-eskrim.jpg') center -150px no-repeat;
+}
+
+.system_action {
+  text-align: center;
+  padding: 0 0 15px;
+}
+.arena_restart_btn {
+  padding: 10px;
+  cursor: pointer;
 }
 
 .session {
