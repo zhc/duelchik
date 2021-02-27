@@ -11,7 +11,7 @@ lobby = Lobby()
 
 origins = [
     'http://localhost:8888',
-    'http://80.78.248.143:8080',
+    'http://80.78.248.143:8888',
 ]
 
 app.add_middleware(
