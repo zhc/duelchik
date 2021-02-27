@@ -124,7 +124,7 @@ class Game:
         if move_card > 0:
             player.forward(move_card)
         elif move_card < 0:
-            player.backward(move_card)
+            player.backward(-move_card)
         else:
             pass
         while len(player.cards) < 5 and not self.deck.empty():
