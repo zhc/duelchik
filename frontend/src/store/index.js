@@ -9,7 +9,7 @@ import queryString from 'query-string';
 
 Vue.use(Vuex);
 
-const parsedQueryString = queryString.parse(location.search);
+const parsedQueryString = queryString.parse(location.hash);
 
 const state = {
     host: 'http://' + window.location.hostname + ':8080',

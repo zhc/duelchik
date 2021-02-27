@@ -19,9 +19,9 @@ export default {
     setSession(state, data) {
         state.session = data;
 
-        const parsedQueryString = queryString.parse(location.search);
+        const parsedQueryString = queryString.parse(location.hash);
         parsedQueryString.d = data;
         const stringquery = queryString.stringify(parsedQueryString);
-        location.search = stringquery;
+        location.hash = stringquery;
     }
 }
