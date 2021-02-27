@@ -44,8 +44,8 @@ export const getToken = ({commit, state}) => {
         (json) => {
             console.log(json);
             if (json.token !== '') {
-                store.dispatch('ping');
                 commit('setToken', json.token);
+                store.dispatch('ping');
             } else {
                 commit('setState', 'EMPTY_TOKEN');
             }
