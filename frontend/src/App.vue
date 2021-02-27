@@ -96,7 +96,8 @@ export default {
   methods: {
     startGameSession() {
       store.commit('setHost', this.server);
-      store.dispatch('getToken', this.session);
+      store.commit('setSession', this.session);
+      store.dispatch('getToken');
     },
     moveTo: function (ind) {
       let moveCard = ind - store.getters.playerIndex;

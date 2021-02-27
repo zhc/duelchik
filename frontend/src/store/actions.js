@@ -38,9 +38,9 @@ export const getMessage = ({commit, state}, moveCard) => {
     );
 };
 
-export const getToken = ({commit, state}, sessionId) => {
+export const getToken = ({commit, state}) => {
     return api.getToken(
-        sessionId,
+        store.getters.session,
         (json) => {
             console.log(json);
             if (json.token !== '') {

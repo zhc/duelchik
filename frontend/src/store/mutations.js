@@ -1,3 +1,5 @@
+import queryString from 'query-string';
+
 export default {
     setGameState(state, data) {
         state.game = data;
@@ -13,5 +15,13 @@ export default {
     },
     setPingTimer(state, data) {
         state.pingTimer = data;
+    },
+    setSession(state, data) {
+        state.session = data;
+
+        const parsedQueryString = queryString.parse(location.search);
+        parsedQueryString.d = data;
+        const stringquery = queryString.stringify(parsedQueryString);
+        location.search = stringquery;
     }
 }
