@@ -10,7 +10,8 @@ app = FastAPI()
 lobby = Lobby()
 
 origins = [
-    "http://localhost:8888",
+    'http://localhost:8888',
+    'http://80.78.248.143:8080',
 ]
 
 app.add_middleware(
@@ -33,8 +34,7 @@ class Message:
             state = 'YOUR_TURN'
         elif self.player.enemy and self.player.enemy.is_active:
             state = 'ENEMY_TURN'
-        elif self.player.enemy and \
-                (self.player.is_dead or self.player.enemy.is_dead):
+        elif self.player.is_game_over():
             state = 'GAME_OVER'
         error_message = ''
         win = 0

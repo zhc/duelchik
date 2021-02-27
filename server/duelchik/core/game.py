@@ -91,6 +91,9 @@ class Player:
     def can_move_backward(self, card):
         return self.position - card >= 0
 
+    def is_game_over(self):
+        return self.enemy and (self.is_dead or self.enemy.is_dead)
+
 
 class Game:
 

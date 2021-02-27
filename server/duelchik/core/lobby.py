@@ -7,10 +7,12 @@ class Lobby:
     def __init__(self):
         self.games = {}
         self.players = {}
+        self.game_overs = {}
 
     def get_token(self, session):
         if session not in self.games:
             game = Game()
+            game.session = session
             self.games[session] = game
         game = self.games[session]
         if not game.has_players():
@@ -22,4 +24,18 @@ class Lobby:
 
     def get_message(self, token, move_card):
         player, game = self.players[token]
-        return game.turn(player, move_card)
+        result = game.turn(player, move_card)
+        if result.is_game_over():
+            if game.session not in self.game_overs:
+                self.game_overs[game.session] = set()
+            self.game_overs[game.session].add(token)
+            self.clean_games()
+        return result
+
+    def clean_games(self):
+        for session, token_set in list(self.game_overs.items()):
+            if len(token_set) >= 2:
+                for token in token_set:
+                    del self.players[token]
+                del self.games[session]
+                del self.game_overs[session]
