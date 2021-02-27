@@ -31,16 +31,28 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
-                    test: /\.scss$/, use: [
+                    test: /\.scss$/,
+                    use: [
                         'vue-style-loader',
                         {
-                            loader: 'css-loader'
+                            loader: 'css-loader',
                         },
                         {
                             loader: 'sass-loader'
                         }
                     ]
                 },
+                {
+                    test: /\.(png|jpg|gif)$/i,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                limit: false,
+                            },
+                        },
+                    ],
+                }
             ]
         },
         plugins: [

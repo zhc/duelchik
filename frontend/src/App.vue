@@ -147,7 +147,8 @@ body {
   flex-direction: column;
   align-content: center;
   height: 100%;
-  margin-top: 10%;
+  padding-top: 280px;
+  background: #fff url('./assets/espada-eskrim.jpg') center -150px no-repeat;
 }
 
 .session {
