@@ -33,14 +33,16 @@ class Game:
     def turn(self, player, move_card):
         if not self.has_players():
             return player
-        if self.player_is_blocked(player):
+
+        if player.is_blocked():
             player.hurt()
         elif move_card > 0:
             player.forward(move_card)
         elif move_card < 0:
             player.backward(-move_card)
-        elif self.player_is_empty_hands(player):
-            self.player_hurt_on_game_over(player)
+        elif player.are_empty_hands():
+            player.hurt_on_game_over()
+
         self.deal_card(player)
         return player
 
@@ -48,16 +50,3 @@ class Game:
         while len(player.cards) < self.hand_size and not self.deck.empty():
             card = self.deck.next_card()
             player.take(card)
-
-    def player_is_blocked(self, player):
-        return player.is_active and not player.has_moves()
-
-    def player_is_empty_hands(self, player):
-        return len(player.cards) == 0 and len(player.enemy.cards) == 0
-
-    def player_hurt_on_game_over(self, player):
-        if player.position < player.enemy.position:
-            player.hurt()
-        elif player.position == player.enemy.position:
-            player.hurt()
-            player.enemy.hurt()

@@ -69,3 +69,16 @@ class Player:
 
     def is_game_over(self):
         return self.enemy and (self.is_dead or self.enemy.is_dead)
+
+    def is_blocked(self):
+        return self.is_active and not self.has_moves()
+
+    def are_empty_hands(self):
+        return len(self.cards) == 0 and len(self.enemy.cards) == 0
+
+    def hurt_on_game_over(self):
+        if self.position < self.enemy.position:
+            self.hurt()
+        elif self.position == self.enemy.position:
+            self.hurt()
+            self.enemy.hurt()
