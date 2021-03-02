@@ -25,17 +25,23 @@ app.add_middleware(
 
 class Message:
 
+    YOUR_TURN = 'YOUR_TURN'
+    ENEMY_TURN = 'ENEMY_TURN'
+    WAITING_PLAYER = 'WAITING_PLAYER'
+    GAME_OVER = 'GAME_OVER'
+    ERROR = 'ERROR'
+
     def __init__(self, player):
         self.player = player
 
     def response(self):
-        state = 'WAITING_PLAYER'
+        state = Message.WAITING_PLAYER
         if self.player.is_active:
-            state = 'YOUR_TURN'
+            state = Message.YOUR_TURN
         elif self.player.enemy and self.player.enemy.is_active:
-            state = 'ENEMY_TURN'
+            state = Message.ENEMY_TURN
         elif self.player.is_game_over():
-            state = 'GAME_OVER'
+            state = Message.GAME_OVER
         error_message = ''
         win = 0
         if self.player.enemy and self.player.enemy.is_dead:
@@ -104,7 +110,7 @@ def surge_request(request: DuelchikRequest):
         msg = traceback.format_exc()
         print(msg)
         return DuelchikResponse(
-                state='ERROR',
+                state=Message.ERROR,
                 error_message=msg,
                 deck=[],
                 win=0,
