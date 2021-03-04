@@ -3,3 +3,4 @@ venv
 __pycache__
 tags
 .ycm_extra_conf.py
+.idea

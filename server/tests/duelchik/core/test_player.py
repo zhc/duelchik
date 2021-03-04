@@ -59,7 +59,7 @@ class TestPlayer(TestCase):
         self.assertFalse(self.player.enemy.is_active)
         self.assertTrue(self.player.enemy.is_dead)
 
-    def test_no_card_cannot_move(self):
+    def test_no_moves(self):
         self.assertFalse(self.player.has_moves())
 
     def test_can_move_forward(self):
@@ -68,6 +68,27 @@ class TestPlayer(TestCase):
         self.player.take(100)
         self.assertTrue(self.player.has_moves())
 
-    def test_can_move_forward_with_card(self):
+    def test_no_moves_with_card(self):
         self.player.take(100)
         self.assertFalse(self.player.has_moves())
+
+    def test_player_is_blocked(self):
+        self.assertTrue(self.player.is_blocked())
+        self.player.take(1)
+        self.assertFalse(self.player.is_blocked())
+
+    def test_both_has_empty_hands(self):
+        self.assertTrue(self.player.are_empty_hands())
+        self.player.take(1)
+        self.assertFalse(self.player.are_empty_hands())
+
+    def test_both_hurt(self):
+        self.player.hurt_on_game_over()
+        self.assertTrue(self.player.is_dead)
+        self.assertTrue(self.player.enemy.is_dead)
+
+    def test_hurt_on_low_position(self):
+        self.player.enemy.position = 1
+        self.player.hurt_on_game_over()
+        self.assertTrue(self.player.is_dead)
+        self.assertFalse(self.player.enemy.is_dead)

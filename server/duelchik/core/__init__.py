@@ -1,7 +1,6 @@
-from duelchik.core.game import Game, Player, Deck, YOUR_TURN, ENEMY_TURN, \
-                                WAITING_PLAYER, ERROR, GAME_OVER
+from duelchik.core.game import Game, Deck
 from duelchik.core.lobby import Lobby
+from duelchik.core.player import Player
 
 
-__all__ = [Game, Lobby, Player, YOUR_TURN, ENEMY_TURN, WAITING_PLAYER,
-           ERROR, GAME_OVER, Deck]
+__all__ = [Game, Lobby, Player, Deck]

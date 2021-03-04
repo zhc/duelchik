@@ -24,13 +24,13 @@ class Lobby:
 
     def get_message(self, token, move_card):
         player, game = self.players[token]
-        result = game.turn(player, move_card)
-        if result.is_game_over():
+        player = game.turn(player, move_card)
+        if player.is_someone_dead():
             if game.session not in self.game_overs:
                 self.game_overs[game.session] = set()
             self.game_overs[game.session].add(token)
             self.clean_games()
-        return result
+        return player
 
     def clean_games(self):
         for session, token_set in list(self.game_overs.items()):
